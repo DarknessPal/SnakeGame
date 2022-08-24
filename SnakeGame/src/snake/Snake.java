@@ -1,12 +1,14 @@
 package snake;
 
 public class Snake {
-    int x, y, count;
-    public Snake(int x, int y, int count)
+    private int length;//Длина тела
+    private int[] snakeX;// Определяем абсциссу каждой точки, составляющей тело
+    private int[] snakeY;// Определяем продольную координату каждой точки тела
+    private String headPath;
+    public Snake(int[]snakeX, int[] snakeY, String headPath)
     {
-        this.x = x;
-        this.y = y;
-        this.count = count;
+        this.snakeX = snakeX;
+        this.snakeY = snakeY;
+        this.headPath = headPath;
     }
 }
-

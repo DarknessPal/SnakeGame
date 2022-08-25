@@ -3,12 +3,7 @@ package snake;
 public class Main {
     public static void main(String[] args) {
 
-        Screen screen = new Screen();
-        screen.setVisible(true);
-        //screen.drawScene();
-        //SnakeGame snakeGame = new SnakeGame();
-        //snakeGame.initialize();
-
+        new Screen();
 
     }
 }

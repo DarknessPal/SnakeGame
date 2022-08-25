@@ -1,14 +1,18 @@
 package snake;
 
 public class Snake {
-    private int length;//Длина тела
-    private int[] snakeX;// Определяем абсциссу каждой точки, составляющей тело
-    private int[] snakeY;// Определяем продольную координату каждой точки тела
-    private String headPath;
-    public Snake(int[]snakeX, int[] snakeY, String headPath)
+    int [] x, y;
+    int startX, startY;
+    String move;
+    int length;
+    public Snake (int[] x, int[] y, int length, String move, int startX, int startY)
     {
-        this.snakeX = snakeX;
-        this.snakeY = snakeY;
-        this.headPath = headPath;
+        this.x = x;
+        this.y = y;
+        this.length = length;
+        this.move = move;
+        this.x [0] = startX;
+        this.y [0] = startY;
     }
 }
+

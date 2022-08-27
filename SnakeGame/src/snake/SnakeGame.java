@@ -11,7 +11,7 @@ import java.util.Random;
 
 public class SnakeGame extends JPanel implements ActionListener{
     private boolean isPause = false;  // Pause
-    private boolean isFail = false;    // Gameover
+    private boolean isFail = false;    // Game over
 
     Timer timer = new Timer(150, this);
     Random random;
@@ -90,7 +90,17 @@ public class SnakeGame extends JPanel implements ActionListener{
                     snake.x[i] = snake.x[i - 1];
                     snake.y[i] = snake.y[i - 1];
                 }
-                if (snake.move.equals("R")) {  // move right
+                switch(snake.move){
+                    case "R": snake.x[0] += unitSize;    // move right
+                    break;
+                    case "U": snake.y[0] += unitSize;  // move up
+                    break;
+                    case "L": snake.x[0] -= unitSize;   // move left
+                    break;
+                    case "D": snake.y[0] -= unitSize;  // move down
+                    break;
+                }
+     /*           if (snake.move.equals("R")) {     // move right
                     snake.x[0] += unitSize;
                 }
                 if (snake.move.equals("U")) {  // move up
@@ -101,18 +111,21 @@ public class SnakeGame extends JPanel implements ActionListener{
                 }
                 if (snake.move.equals("D")) {  // move down
                     snake.y[0] -= unitSize;
-                }
+                }*/
                 if (snake.x[0] == width) {
                     snake.x[0] = 0;
-                }
-                if (snake.x[0] == (-unitSize)) {
-                    snake.x[0] = (width - unitSize);
-                }
-                if (snake.y[0] == height) {
-                    snake.y[0] = 0;
-                }
-                if (snake.y[0] == (-unitSize)) {
-                    snake.y[0] = (height - unitSize);
+                }else {
+                    if (snake.x[0] == (-unitSize)) {
+                        snake.x[0] = (width - unitSize);
+                    } else {
+                        if (snake.y[0] == height) {
+                            snake.y[0] = 0;
+                        } else {
+                            if (snake.y[0] == (-unitSize)) {
+                                snake.y[0] = (height - unitSize);
+                            }
+                        }
+                    }
                 }
 //        System.out.println("snake.x[0] in position "  + " = " + snake.x[0]);
 //        System.out.println("snake.y[0] in position "  + " = " + snake.y[0]);
@@ -126,7 +139,35 @@ public class SnakeGame extends JPanel implements ActionListener{
         public void keyPressed(KeyEvent e) {
             //key logic
             int keyCode = e.getKeyCode();
-            if (keyCode == 32){  // space
+            switch(keyCode){
+                case 32: isPause = !isPause;  // space
+                    break;
+                case 39:
+                case 68:
+                    if(!Objects.equals(snake.move, "L")) {    // key right
+                    snakeKeyMove = "R";
+                }
+                    break;
+                case 40:
+                case 83:
+                    if(!Objects.equals(snake.move, "D")) {    // key up
+                        snakeKeyMove = "U";
+                    }
+                    break;
+                case 37:
+                case 65:
+                    if(!Objects.equals(snake.move,"R")) {  // key left
+                        snakeKeyMove = "L";
+                    }
+                    break;
+                case 38:
+                case 87:
+                    if(!Objects.equals(snake.move,"U")) {
+                        snakeKeyMove = "D";
+                    }
+                    break;
+            }
+  /*          if (keyCode == 32){  // space
                 isPause = !isPause;
             }
             if (keyCode == 39 ||keyCode == 68){   // key right
@@ -148,7 +189,7 @@ public class SnakeGame extends JPanel implements ActionListener{
                 if(!Objects.equals(snake.move,"U")) {
                     snakeKeyMove = "D";
                 }
-            }
+            }*/
         }
     }
 }

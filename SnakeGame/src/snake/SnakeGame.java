@@ -12,7 +12,7 @@ import java.util.Random;
 
 public class SnakeGame extends JPanel implements ActionListener{
     private boolean isPause = false;  // Pause
-    private boolean isFail = true;    // Game over
+    private boolean isFail = false;    // Game over
 
     Timer timer = new Timer(150, this);
     Random random;
@@ -44,7 +44,7 @@ public class SnakeGame extends JPanel implements ActionListener{
             graphic.setFont(new Font("Microsoft Yahei", Font.BOLD, unitSize));
             graphic.drawString("Press space to continue the game", width/unitSize, height/2);
         }
-        if (!isFail) {
+        if (isFail) {
             graphic.setColor(Color.RED);
             graphic.setFont(new Font("Microsoft Yahei", Font.BOLD, unitSize));
             graphic.drawString("Game over", width/2, height/2);
@@ -62,10 +62,10 @@ public class SnakeGame extends JPanel implements ActionListener{
     
     @Override
     public void actionPerformed(ActionEvent arg0) {
-        if (isFail && !isPause) {
+        if (!isFail && !isPause) {
                     for (int i = 1; i < snake.length - 1; i++) {
                         if (snake.x.get(0).equals(snake.x.get(i)) && snake.y.get(0).equals(snake.y.get(i))) {
-                            isFail = false;
+                            isFail = true;
                         }
                     }
                 if (snake.x.get(0) == apple.x && snake.y.get(0) == apple.y) {  //eat Apple

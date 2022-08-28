@@ -1,18 +1,18 @@
 package snake;
 
+import java.util.ArrayList;
+
 public class Snake {
-    int [] x, y;
-    int startX, startY;
+    ArrayList<Integer> x, y;
     String move;
     int length;
-    public Snake (int[] x, int[] y, int length, String move, int startX, int startY)
+    public Snake (int length, String move, int startX, int startY)
     {
-        this.x = x;
-        this.y = y;
+        this.x = new ArrayList<>();
+        this.y = new ArrayList<>();
         this.length = length;
         this.move = move;
-        this.x [0] = startX;
-        this.y [0] = startY;
+        x.add(0, startX);
+        y.add(0, startY);
     }
 }
-

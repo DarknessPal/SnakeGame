@@ -6,12 +6,13 @@ import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.event.KeyAdapter;
 import java.awt.event.KeyEvent;
+import java.util.Arrays;
 import java.util.Objects;
 import java.util.Random;
 
 public class SnakeGame extends JPanel implements ActionListener{
     private boolean isPause = false;  // Pause
-    private boolean isFail = false;    // Game over
+    private boolean isFail = true;    // Game over
 
     Timer timer = new Timer(150, this);
     Random random;
@@ -21,13 +22,9 @@ public class SnakeGame extends JPanel implements ActionListener{
     private final int unitSize = 20;
     final int startX = (int) Math.sqrt(width)*unitSize/2;
     final int startY = (int) Math.sqrt(height)*unitSize/2;
-    int snakeArrayXSize = width/unitSize*height/unitSize;
-    int snakeArrayYSize = width/unitSize*height/unitSize;
     //snake and apple
-/*    private int[] snakeArrayX = new int[]{50};
-    private int[] snakeArrayY = new int[]{60};
-    private int snakeLenght = 6;*/
-    private final Snake snake = new Snake (new int[snakeArrayXSize], new int[snakeArrayYSize], 1, "R", startX, startY);
+    int snakeLength = 1;
+    private final Snake snake = new Snake (snakeLength, "R", startX, startY);  //dynamic massive
     private final Apple apple = new Apple (unitSize,unitSize);
 
     public SnakeGame() {
@@ -47,10 +44,10 @@ public class SnakeGame extends JPanel implements ActionListener{
             graphic.setFont(new Font("Microsoft Yahei", Font.BOLD, unitSize));
             graphic.drawString("Press space to continue the game", width/unitSize, height/2);
         }
-        if (isFail) {
+        if (!isFail) {
             graphic.setColor(Color.RED);
             graphic.setFont(new Font("Microsoft Yahei", Font.BOLD, unitSize));
-            graphic.drawString("Gameover", width/2, height/2);
+            graphic.drawString("Game over", width/2, height/2);
         }
         repaint();
     }
@@ -59,80 +56,57 @@ public class SnakeGame extends JPanel implements ActionListener{
         graphic.fillOval(apple.x, apple.y, unitSize, unitSize);
         graphic.setColor(Color.RED);
         for (int i = 0; i < snake.length; i++) {
-            graphic.fillRect(snake.x[i], snake.y[i], unitSize, unitSize);
+            graphic.fillRect(snake.x.get(i), snake.y.get(i), unitSize, unitSize);
         }
     }
     
     @Override
     public void actionPerformed(ActionEvent arg0) {
-        if (!isFail) {
-            if (!isPause) {
-                if (snake.length >4) {
+        if (isFail && !isPause) {
                     for (int i = 1; i < snake.length - 1; i++) {
-                        if (snake.x[0] == snake.x[i] && snake.y[0] == snake.y[i]) {
-                            isFail = !isFail;
+                        if (snake.x.get(0).equals(snake.x.get(i)) && snake.y.get(0).equals(snake.y.get(i))) {
+                            isFail = false;
                         }
                     }
-                }
-                if (snake.x[0] == apple.x && snake.y[0] == apple.y) {  //eat Apple
+                if (snake.x.get(0) == apple.x && snake.y.get(0) == apple.y) {  //eat Apple
                     snake.length++;
+                    for (int i = snake.length-2; i > snake.length-3; i--) {
+                        snake.x.add(snake.length-1,snake.x.get(i));
+                        snake.y.add(snake.length-1,snake.y.get(i));
+                    }
                     apple.x = random.nextInt((width) / unitSize) * unitSize;
                     apple.y = random.nextInt((height) / unitSize) * unitSize;
-                    START: for (int i = 0; i < snake.length; i++) {
-                        if(apple.x == snake.x[i] && apple.y == snake.y[i]){
-                            apple.x = random.nextInt((width) / unitSize) * unitSize;
-                            apple.y = random.nextInt((height) / unitSize) * unitSize;
-                            continue START;
-                        }
+                    while(Arrays.asList(snake.x).contains(apple.x) && Arrays.asList(snake.y).contains(apple.y)){
+                        apple.x = random.nextInt((width) / unitSize) * unitSize;
+                        apple.y = random.nextInt((height) / unitSize) * unitSize;
                     }
                 }
-                for (int i = snake.length - 1; i > 0; i--) {  //body move
-                    snake.x[i] = snake.x[i - 1];
-                    snake.y[i] = snake.y[i - 1];
+                for (int i = snake.length-1; i > 0; i--) {  //body move
+                    snake.x.set(i, snake.x.get(i-1));
+                    snake.y.set(i, snake.y.get(i-1));
                 }
                 switch(snake.move){
-                    case "R": snake.x[0] += unitSize;    // move right
+                    case "R": snake.x.set(0, snake.x.get(0) + unitSize);    // move right
                     break;
-                    case "U": snake.y[0] += unitSize;  // move up
+                    case "U": snake.y.set(0, snake.y.get(0) + unitSize);  // move up
                     break;
-                    case "L": snake.x[0] -= unitSize;   // move left
+                    case "L": snake.x.set(0, snake.x.get(0) - unitSize);   // move left
                     break;
-                    case "D": snake.y[0] -= unitSize;  // move down
+                    case "D": snake.y.set(0, snake.y.get(0)- unitSize);  // move down
                     break;
                 }
-     /*           if (snake.move.equals("R")) {     // move right
-                    snake.x[0] += unitSize;
-                }
-                if (snake.move.equals("U")) {  // move up
-                    snake.y[0] += unitSize;
-                }
-                if (snake.move.equals("L")) {  // move left
-                    snake.x[0] -= unitSize;
-                }
-                if (snake.move.equals("D")) {  // move down
-                    snake.y[0] -= unitSize;
-                }*/
-                if (snake.x[0] == width) {
-                    snake.x[0] = 0;
-                }else {
-                    if (snake.x[0] == (-unitSize)) {
-                        snake.x[0] = (width - unitSize);
-                    } else {
-                        if (snake.y[0] == height) {
-                            snake.y[0] = 0;
-                        } else {
-                            if (snake.y[0] == (-unitSize)) {
-                                snake.y[0] = (height - unitSize);
-                            }
+                if (snake.x.get(0) == width) {
+                    snake.x.set(0, 0);
+                }else if (snake.x.get(0) == (-unitSize)) {
+                    snake.x.set(0, width - unitSize);
+                    } else if (snake.y.get(0) == height) {
+                            snake.y.set(0, 0);
+                        } else if (snake.y.get(0) == (-unitSize)) {
+                                snake.y.set(0, height - unitSize);
                         }
-                    }
-                }
-//        System.out.println("snake.x[0] in position "  + " = " + snake.x[0]);
-//        System.out.println("snake.y[0] in position "  + " = " + snake.y[0]);
                 repaint();
                 snake.move = snakeKeyMove;
             }
-        }
     }
     public class MyKey extends KeyAdapter{
         @Override
@@ -167,29 +141,6 @@ public class SnakeGame extends JPanel implements ActionListener{
                     }
                     break;
             }
-  /*          if (keyCode == 32){  // space
-                isPause = !isPause;
-            }
-            if (keyCode == 39 ||keyCode == 68){   // key right
-                if(!Objects.equals(snake.move, "L")) {
-                    snakeKeyMove = "R";
-                }
-            }
-            if (keyCode == 40 ||keyCode == 83){   // key up
-                if(!Objects.equals(snake.move, "D")) {
-                    snakeKeyMove = "U";
-                }
-            }
-            if (keyCode == 37 ||keyCode == 65){   // key left
-                if(!Objects.equals(snake.move,"R")) {
-                    snakeKeyMove = "L";
-                }
-            }
-            if (keyCode == 38 ||keyCode == 87){    //  key down
-                if(!Objects.equals(snake.move,"U")) {
-                    snakeKeyMove = "D";
-                }
-            }*/
         }
     }
 }

@@ -11,9 +11,11 @@ import java.util.Objects;
 import java.util.Random;
 
 public class SnakeGame extends JPanel implements ActionListener{
+    JFrame jFrame = new JFrame();
     private boolean isPause = false;  // Pause
     private boolean isFail = false;    // Game over
-
+    String pause = "Press space to continue the game";
+    String fail = "Game over";
     Timer timer = new Timer(150, this);
     Random random;
     private String snakeKeyMove = "R";
@@ -40,14 +42,15 @@ public class SnakeGame extends JPanel implements ActionListener{
         super.paintComponent(graphic);
         draw(graphic);
         if (isPause) {
+           // JOptionPane.showMessageDialog(jFrame, pause);
             graphic.setColor(Color.BLACK);
             graphic.setFont(new Font("Microsoft Yahei", Font.BOLD, unitSize));
-            graphic.drawString("Press space to continue the game", width/unitSize, height/2);
+            graphic.drawString(pause, width/unitSize, height/2);
         }
         if (isFail) {
             graphic.setColor(Color.RED);
             graphic.setFont(new Font("Microsoft Yahei", Font.BOLD, unitSize));
-            graphic.drawString("Game over", width/2, height/2);
+            graphic.drawString(fail, width/2, height/2);
         }
         repaint();
     }
@@ -99,11 +102,11 @@ public class SnakeGame extends JPanel implements ActionListener{
                     snake.x.set(0, 0);
                 }else if (snake.x.get(0) == (-unitSize)) {
                     snake.x.set(0, width - unitSize);
-                    } else if (snake.y.get(0) == height) {
+                } else if (snake.y.get(0) == height) {
                             snake.y.set(0, 0);
-                        } else if (snake.y.get(0) == (-unitSize)) {
+                } else if (snake.y.get(0) == (-unitSize)) {
                                 snake.y.set(0, height - unitSize);
-                        }
+                }
                 repaint();
                 snake.move = snakeKeyMove;
             }

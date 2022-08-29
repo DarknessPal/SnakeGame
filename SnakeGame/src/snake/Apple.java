@@ -2,9 +2,9 @@ package snake;
 import java.util.Random;
 public class Apple{
  Random random = new Random();
-    int x,y;
-    public Apple (int x, int y){
-        this.x = random.nextInt(x)*20;
-        this.y = random.nextInt(y)*20;
+    int x,y, unitSize;
+    public Apple (int x, int y, int unitSize){
+        this.x = random.nextInt(x)*unitSize;
+        this.y = random.nextInt(y)*unitSize;
     }
 }

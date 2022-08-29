@@ -11,7 +11,6 @@ import java.util.Objects;
 import java.util.Random;
 
 public class SnakeGame extends JPanel implements ActionListener{
-    JFrame jFrame = new JFrame();
     private boolean isPause = false;  // Pause
     private boolean isFail = false;    // Game over
     String pause = "Press space to continue the game";
@@ -19,15 +18,15 @@ public class SnakeGame extends JPanel implements ActionListener{
     Timer timer = new Timer(150, this);
     Random random;
     private String snakeKeyMove = "R";
-    private final int width = 500;
-    private final int height = 500;
+    private final int width = 400;
+    private final int height = 400;
     private final int unitSize = 20;
-    final int startX = (int) Math.sqrt(width)*unitSize/2;
-    final int startY = (int) Math.sqrt(height)*unitSize/2;
+    final int startX = width/2-((width/2)%unitSize);
+    final int startY = height/2-((height/2)%unitSize);
     //snake and apple
     int snakeLength = 1;
     private final Snake snake = new Snake (snakeLength, "R", startX, startY);  //dynamic massive
-    private final Apple apple = new Apple (unitSize,unitSize);
+    private final Apple apple = new Apple (width/unitSize,height/unitSize, unitSize);
 
     public SnakeGame() {
         this.setPreferredSize(new Dimension(width, height));
@@ -41,75 +40,88 @@ public class SnakeGame extends JPanel implements ActionListener{
     public void paintComponent(Graphics graphic) {
         super.paintComponent(graphic);
         draw(graphic);
-        if (isPause) {
-           // JOptionPane.showMessageDialog(jFrame, pause);
-            graphic.setColor(Color.BLACK);
-            graphic.setFont(new Font("Microsoft Yahei", Font.BOLD, unitSize));
-            graphic.drawString(pause, width/unitSize, height/2);
-        }
-        if (isFail) {
-            graphic.setColor(Color.RED);
-            graphic.setFont(new Font("Microsoft Yahei", Font.BOLD, unitSize));
-            graphic.drawString(fail, width/2, height/2);
-        }
         repaint();
     }
-    public void draw(Graphics graphic) {
-        graphic.setColor(Color.GREEN);
-        graphic.fillOval(apple.x, apple.y, unitSize, unitSize);
-        graphic.setColor(Color.RED);
-        for (int i = 0; i < snake.length; i++) {
-            graphic.fillRect(snake.x.get(i), snake.y.get(i), unitSize, unitSize);
+    public void pause (Graphics g){
+        g.setColor(Color.BLACK);
+        g.setFont(new Font("Ink Free", Font.BOLD, unitSize));
+        FontMetrics metrics = getFontMetrics(g.getFont());
+        g.drawString(pause, (width - metrics.stringWidth(pause))/2,height/2);
+    }
+    public void gameOver (Graphics g){
+        g.setColor(Color.RED);
+        g.setFont(new Font("Ink Free", Font.BOLD, unitSize));
+        FontMetrics metrics = getFontMetrics(g.getFont());
+        g.drawString(fail,(width - metrics.stringWidth(fail))/2,height/2);
+        }
+    public void draw(Graphics g) {
+        if (!isFail && !isPause) {
+            for (int i = 0; i < height/unitSize; i++){
+                g.setColor(Color.BLACK);
+                g.drawLine(i*unitSize,0,i*unitSize,height);
+                g.drawLine(0,i*unitSize, width, i*unitSize);
+            }
+            g.setColor(Color.GREEN);
+            g.fillOval(apple.x, apple.y, unitSize, unitSize);
+            g.setColor(Color.RED);
+            for (int i = 0; i < snake.length; i++) {
+                g.fillRect(snake.x.get(i), snake.y.get(i), unitSize, unitSize);
+            }
+        } else if (isFail == true) {
+            gameOver(g);
+        }else if (isPause == true) {
+            pause(g);
         }
     }
-    
     @Override
     public void actionPerformed(ActionEvent arg0) {
         if (!isFail && !isPause) {
-                    for (int i = 1; i < snake.length - 1; i++) {
-                        if (snake.x.get(0).equals(snake.x.get(i)) && snake.y.get(0).equals(snake.y.get(i))) {
-                            isFail = true;
-                        }
-                    }
-                if (snake.x.get(0) == apple.x && snake.y.get(0) == apple.y) {  //eat Apple
-                    snake.length++;
-                    for (int i = snake.length-2; i > snake.length-3; i--) {
-                        snake.x.add(snake.length-1,snake.x.get(i));
-                        snake.y.add(snake.length-1,snake.y.get(i));
-                    }
-                    apple.x = random.nextInt((width) / unitSize) * unitSize;
-                    apple.y = random.nextInt((height) / unitSize) * unitSize;
-                    while(Arrays.asList(snake.x).contains(apple.x) && Arrays.asList(snake.y).contains(apple.y)){
-                        apple.x = random.nextInt((width) / unitSize) * unitSize;
-                        apple.y = random.nextInt((height) / unitSize) * unitSize;
-                    }
+            for (int i = 1; i < snake.length - 1; i++) {
+                if (snake.x.get(0).equals(snake.x.get(i)) && snake.y.get(0).equals(snake.y.get(i))) {
+                    isFail = true;
                 }
-                for (int i = snake.length-1; i > 0; i--) {  //body move
-                    snake.x.set(i, snake.x.get(i-1));
-                    snake.y.set(i, snake.y.get(i-1));
-                }
-                switch(snake.move){
-                    case "R": snake.x.set(0, snake.x.get(0) + unitSize);    // move right
-                    break;
-                    case "U": snake.y.set(0, snake.y.get(0) + unitSize);  // move up
-                    break;
-                    case "L": snake.x.set(0, snake.x.get(0) - unitSize);   // move left
-                    break;
-                    case "D": snake.y.set(0, snake.y.get(0)- unitSize);  // move down
-                    break;
-                }
-                if (snake.x.get(0) == width) {
-                    snake.x.set(0, 0);
-                }else if (snake.x.get(0) == (-unitSize)) {
-                    snake.x.set(0, width - unitSize);
-                } else if (snake.y.get(0) == height) {
-                            snake.y.set(0, 0);
-                } else if (snake.y.get(0) == (-unitSize)) {
-                                snake.y.set(0, height - unitSize);
-                }
-                repaint();
-                snake.move = snakeKeyMove;
             }
+            if (snake.x.get(0) == apple.x && snake.y.get(0) == apple.y) {  //eat Apple
+                snake.length++;
+                snake.x.add(snake.length - 1, snake.x.get(snake.length - 2));
+                snake.y.add(snake.length - 1, snake.y.get(snake.length - 2));
+                apple.x = random.nextInt((width) / unitSize) * unitSize;
+                apple.y = random.nextInt((height) / unitSize) * unitSize;
+                while (snake.x.contains(apple.x) && snake.y.contains(apple.y)) {
+                    apple.x = random.nextInt(width / unitSize) * unitSize;
+                    apple.y = random.nextInt(height / unitSize) * unitSize;
+                }
+            }
+            for (int i = snake.length - 1; i > 0; i--) {  //body move
+                snake.x.set(i, snake.x.get(i - 1));
+                snake.y.set(i, snake.y.get(i - 1));
+            }
+            switch (snake.move) {
+                case "R":
+                    snake.x.set(0, snake.x.get(0) + unitSize);    // move right
+                    break;
+                case "U":
+                    snake.y.set(0, snake.y.get(0) + unitSize);  // move up
+                    break;
+                case "L":
+                    snake.x.set(0, snake.x.get(0) - unitSize);   // move left
+                    break;
+                case "D":
+                    snake.y.set(0, snake.y.get(0) - unitSize);  // move down
+                    break;
+            }
+            if (snake.x.get(0) == width) {
+                snake.x.set(0, 0);
+            } else if (snake.x.get(0) == (-unitSize)) {
+                snake.x.set(0, width - unitSize);
+            } else if (snake.y.get(0) == height) {
+                snake.y.set(0, 0);
+            } else if (snake.y.get(0) == (-unitSize)) {
+                snake.y.set(0, height - unitSize);
+            }
+            repaint();
+            snake.move = snakeKeyMove;
+        }
     }
     public class MyKey extends KeyAdapter{
         @Override

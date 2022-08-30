@@ -24,7 +24,7 @@ public class MainMenu extends JPanel implements ActionListener {
         startGameButton.addActionListener(new ActionListener() {
             public void actionPerformed(ActionEvent e) {
                 SnakeGame snakeGame = new SnakeGame();
-                add(new SnakeGame());
+                add(snakeGame);
                 snakeGame.requestFocus();
             }
         });
@@ -34,7 +34,7 @@ public class MainMenu extends JPanel implements ActionListener {
             }
         });
         setLayout(new GridLayout(3,1));
-        setSize(800, 800);
+        setSize(400, 400);
         setVisible(true);
     }
        @Override

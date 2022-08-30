@@ -7,8 +7,8 @@ public class Screen extends JFrame{
     public static int set = 0;
 
     public Screen() {
-        final int width = 800;
-        final int height = 800;
+        final int width = 400;
+        final int height = 420;
         this.setPreferredSize(new Dimension(width, height));
         this.setLayout(null);
         this.setBackground(Color.white);

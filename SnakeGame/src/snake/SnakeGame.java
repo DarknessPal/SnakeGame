@@ -6,9 +6,10 @@ import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.event.KeyAdapter;
 import java.awt.event.KeyEvent;
-import java.util.Arrays;
 import java.util.Objects;
 import java.util.Random;
+
+import static java.awt.event.KeyEvent.*;
 
 public class SnakeGame extends JPanel implements ActionListener{
     private boolean isPause = false;  // Pause
@@ -33,6 +34,9 @@ public class SnakeGame extends JPanel implements ActionListener{
         this.setBackground(Color.white);
         this.setFocusable(true);
         this.addKeyListener(new MyKey());
+        this.setSize(800, 800);
+        this.setLayout(new FlowLayout());;
+        this.setVisible(true);
         random = new Random();
         timer.start();
     }
@@ -134,7 +138,7 @@ public class SnakeGame extends JPanel implements ActionListener{
                 case 39:
                 case 68:
                     if(!Objects.equals(snake.move, "L")) {    // key right
-                    snakeKeyMove = "R";
+                        snakeKeyMove = "R";
                 }
                     break;
                 case 40:

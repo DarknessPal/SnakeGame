@@ -6,9 +6,9 @@ import java.awt.*;
 public class Screen extends JFrame{
     public static int set = 0;
 
-    public Screen(){
-        final int width = 400;
-        final int height = 400;
+    public Screen() {
+        final int width = 800;
+        final int height = 800;
         this.setPreferredSize(new Dimension(width, height));
         this.setLayout(null);
         this.setBackground(Color.white);
@@ -16,17 +16,8 @@ public class Screen extends JFrame{
         this.setResizable(false);
         this.pack();
         this.setLocationRelativeTo(null);
-        if (set == 0){
-            add(new MainMenu());
-            setTitle("Main Menu");
-        }
-        if (set == 1){
-            this.add(new SnakeGame());
-            this.setTitle("Snake");
-        }
-        if (set == 2){
-            this.setTitle("Settings");
-        }
+        add(new MainMenu());
+        setTitle("Main Menu");
         this.setVisible(true);
     }
 }

@@ -46,7 +46,7 @@ public class MainMenu extends JFrame implements ActionListener {
     public void actionPerformed(ActionEvent ae) {
         String action = ae.getActionCommand();
         if (action.equals("Start the new game")) {
-            this.add(new SnakeGame());
+            new SnakeGame();
             this.setTitle("Snake");
         }
     }
@@ -55,7 +55,7 @@ public class MainMenu extends JFrame implements ActionListener {
 
         //Create and set up the window.
 
-        JFrame frame = new MainMenu();
+  /*      JFrame frame = new MainMenu();
 
         //Display the window.
 
@@ -63,7 +63,7 @@ public class MainMenu extends JFrame implements ActionListener {
 
         frame.setVisible(true);
 
-        frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+        frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);*/
 
     }
 

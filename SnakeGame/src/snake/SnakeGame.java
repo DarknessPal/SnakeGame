@@ -9,24 +9,25 @@ import java.awt.event.KeyEvent;
 import java.util.Objects;
 import java.util.Random;
 
-import static java.awt.event.KeyEvent.*;
-
 public class SnakeGame extends JPanel implements ActionListener{
+    Random random;
+    // Pause and game over
     private boolean isPause = false;  // Pause
     private boolean isFail = false;    // Game over
     String pause = "Press space to continue the game";
     String fail = "Game over";
-    Timer timer = new Timer(150, this);
-    Random random;
-    private String snakeKeyMove = "R";
-    private final int width = 400;
-    private final int height = 400;
+    // Game parameter
+    Timer timer = new Timer(Settings.snakeSpeed, this);
+    // screen parameters
     private final int unitSize = 20;
+    private final int width = Settings.screenHeight - unitSize*2;
+    private final int height = Settings.screenHeight - (unitSize*2);
+    // Object start parameters
+    private String snakeKeyMove = "R";
     final int startX = width/2-((width/2)%unitSize);
     final int startY = height/2-((height/2)%unitSize);
     //snake and apple
-    int snakeLength = 1;
-    private final Snake snake = new Snake (snakeLength, "R", startX, startY);  //dynamic massive
+    private final Snake snake = new Snake (Settings.snakeLength, "R", startX, startY);  //dynamic massive
     private final Apple apple = new Apple (width/unitSize,height/unitSize, unitSize);
 
     public SnakeGame() {
@@ -34,7 +35,7 @@ public class SnakeGame extends JPanel implements ActionListener{
         this.setBackground(Color.white);
         this.setFocusable(true);
         this.addKeyListener(new MyKey());
-        this.setSize(800, 800);
+        this.setSize(width, height);
         this.setLayout(new FlowLayout());;
         this.setVisible(true);
         random = new Random();
@@ -65,9 +66,11 @@ public class SnakeGame extends JPanel implements ActionListener{
                 g.drawLine(i*unitSize,0,i*unitSize,height);
                 g.drawLine(0,i*unitSize, width, i*unitSize);
             }
-            g.setColor(Color.GREEN);
+            Color appleColor = Settings.appleColor;
+            g.setColor((Settings.appleColor));
             g.fillOval(apple.x, apple.y, unitSize, unitSize);
-            g.setColor(Color.RED);
+            Color snakeColor = Settings.snakeColor;
+            g.setColor((Settings.snakeColor));
             for (int i = 0; i < snake.length; i++) {
                 g.fillRect(snake.x.get(i), snake.y.get(i), unitSize, unitSize);
             }

@@ -1,14 +1,17 @@
 package snake;
 
 import java.awt.*;
+import java.awt.Frame;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import javax.swing.*;
 
 public class MainMenu extends JPanel implements ActionListener {
 
-    private static final long serialVersionUID = 1L;
+//    private static final long serialVersionUID = 1L;
     public MainMenu() {
+        setLayout(null);
+        Insets insets = getInsets();
         // set flow layout for the frame
         JButton startGameButton = new JButton("Star the new game");
         JButton settingGameButton = new JButton("Settings");
@@ -18,8 +21,15 @@ public class MainMenu extends JPanel implements ActionListener {
         add(settingGameButton);
         add(exitButton);
         //set action listeners for buttons
-        settingGameButton.addActionListener(this);
-        exitButton.addActionListener(this);
+        Dimension size = startGameButton.getPreferredSize();
+        startGameButton.setBounds(150 + insets.left, 50 + insets.top,
+                size.width, size.height);
+        settingGameButton.setBounds(150 + insets.left, 150 + insets.top,
+                size.width, size.height);
+        exitButton.setBounds(150 + insets.left, 250 + insets.top,
+                size.width, size.height);
+//        settingGameButton.addActionListener(this);
+ //      exitButton.addActionListener(this);
         // define a custom short action command for the button
         startGameButton.addActionListener(new ActionListener() {
             public void actionPerformed(ActionEvent e) {
@@ -28,12 +38,19 @@ public class MainMenu extends JPanel implements ActionListener {
                 snakeGame.requestFocus();
             }
         });
+        settingGameButton.addActionListener(new ActionListener(){
+            public void actionPerformed(ActionEvent e) {
+                Settings settings = new Settings();
+                add(settings);
+                settings.requestFocus();
+            }
+        });
         exitButton.addActionListener(new ActionListener(){
             public void actionPerformed(ActionEvent e) {
                 System.exit(0);
             }
         });
-        setLayout(new GridLayout(3,1));
+   //     setLayout(new GridLayout(3,1));
         setSize(400, 400);
         setVisible(true);
     }

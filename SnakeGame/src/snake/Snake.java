@@ -14,5 +14,9 @@ public class Snake {
         this.move = move;
         x.add(0, startX);
         y.add(0, startY);
+        for (int i = 1; i < length; i++){
+            x.add(i, x.get(i - 1)-1);
+            y.add(i, startY);
+        }
     }
 }
